@@ -25,6 +25,7 @@ export function createDogLogger(options = {}) {
     quiet: false,
     prefix: "",
     level: "info",
+    context: {},
     write: (line, level) =>
       level === "warn" || level === "error"
         ? console.error(line)
@@ -38,6 +39,23 @@ export function createDogLogger(options = {}) {
   }
   if (typeof config.prefix !== "string")
     throw new TypeError("prefix must be a string.");
+  if (
+    !config.context ||
+    typeof config.context !== "object" ||
+    Array.isArray(config.context)
+  )
+    throw new TypeError("context must be an object of scalar fields.");
+  for (const value of Object.values(config.context))
+    if (!(
+      value === null ||
+      typeof value === "string" ||
+      typeof value === "boolean" ||
+      (typeof value === "number" && Number.isFinite(value))
+    ))
+      throw new TypeError(
+        "Context values must be strings, finite numbers, booleans or null.",
+      );
+  config.context = { ...config.context };
   if (typeof config.level !== "string" || !Object.hasOwn(levels, config.level))
     throw new RangeError(
       `level must be one of: ${Object.keys(levels).join(", ")}.`,
@@ -64,6 +82,9 @@ export function createDogLogger(options = {}) {
           line = JSON.stringify({
             level,
             message,
+            ...(Object.keys(config.context).length
+              ? { context: { ...config.context } }
+              : {}),
             ...(commentary ? { commentary } : {}),
             ...(config.prefix ? { prefix: config.prefix } : {}),
             ...(timestamp ? { timestamp } : {}),
@@ -86,12 +107,23 @@ export function createDogLogger(options = {}) {
       },
     ]),
   );
-  logger.child = (prefix) => {
+  logger.child = (prefix, context = {}) => {
+    if (!context || typeof context !== "object" || Array.isArray(context))
+      throw new TypeError("context must be an object.");
     if (typeof prefix !== "string" || !prefix.trim())
       throw new TypeError("Child prefix must be a nonempty string.");
     return createDogLogger({
       ...config,
+      context: { ...config.context, ...context },
       prefix: [config.prefix, prefix.trim()].filter(Boolean).join(":"),
+    });
+  };
+  logger.withContext = (context) => {
+    if (!context || typeof context !== "object" || Array.isArray(context))
+      throw new TypeError("context must be an object.");
+    return createDogLogger({
+      ...config,
+      context: { ...config.context, ...context },
     });
   };
   return logger;

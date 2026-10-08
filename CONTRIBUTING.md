@@ -1,20 +1,7 @@
 # Contributing
 
-Welcome! Keep doggo-log small, useful, and workplace-safe.
+Welcome to DeployAnyway: tools for developers who probably know better. Keep the core independently useful, offline, and workplace-safe. Use Node 22.13+ or 24, npm ci and a feature branch.
 
-Use Node 22.13+ or 24, create a feature branch, and run `npm ci`.
-Log styles live in `src/levels.js`; behavior lives in `src/index.js`.
-Use an injected `write` function and `clock` in tests instead of real console or time.
+Source lives in src/; CLI orchestration is measured alongside the API. Add meaningful behavior and failure tests. Run npm run build, npm run format, npm run lint, npm run format:check, npm run coverage, npm run test:types, npm run verify:package and npm audit.
 
-Before opening a PR, run:
-
-```sh
-npm run format
-npm run lint
-npm run format:check
-npm test
-npm pack --dry-run
-```
-
-Describe the behavior change and checks. Discuss larger logging features in an
-issue first; this package is intended to stay lightweight.
+Coverage gates: 90% statements/lines/functions and 85% branches. Archive checks install a temporary local tarball and never publish. Document API/output changes and show a concrete use case in your PR. See CODE_OF_CONDUCT.md and SECURITY.md. Release candidates require explicit publication approval.

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 — 2026-10-08
+
+- Useful structured API/CLI additions described in README.
+- TypeScript declarations, CommonJS entry, coverage gates and installed archive checks.
+- Linux Node 22/24 plus Windows/macOS Node 24 CI.
+
 ## 0.2.0 — 2026-10-08
 
 - Scoped logs, optional barks: Use `logger.child("database")` to create an independent logger with a nested prefix. Enable `{ bark: true }` or CLI `--bark` for dog commentary. JSON preserves the original message and adds a separate `commentary` field. Filtering still suppresses output.
