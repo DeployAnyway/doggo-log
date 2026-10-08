@@ -181,6 +181,16 @@ node bin/cli.js info "Request accepted" --json --context '{"requestId":"abc"}'
 
 --stdin explicitly reads UTF-8 input up to 256 KiB; message arguments win. Warn/error go to stderr, other methods to stdout. Logging error still exits 0; malformed configuration exits 2. --no-color and NO_COLOR win over --color. PowerShell quoting differs from POSIX shells; use a simple JSON file or the API when shell quoting becomes the least funny part.
 
+## Try the candidate from source
+
+```sh
+git clone --branch feature/quality-standard https://github.com/DeployAnyway/doggo-log.git
+cd doggo-log
+npm ci
+npm run build
+node bin/cli.js --help
+```
+
 ## Candidate quality standard
 
 The 0.3 candidate provides useful declaration types, ESM/CommonJS exports, installed-archive checks, and coverage gates (90% statements/lines/functions, 85% branches). CI covers Linux Node 22/24 and Windows/macOS Node 24. Node 22.13+ is required. No runtime dependencies, telemetry or network requests.
