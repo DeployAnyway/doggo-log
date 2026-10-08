@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — Unreleased
+## 0.1.0 — 2026-10-08
 
 - Six logging methods, level filtering, quiet mode, and custom prefixes.
 - Optional emojis, ANSI colors, timestamps, and JSON output.

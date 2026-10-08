@@ -11,17 +11,18 @@ A tiny dog-themed logger with useful output and good manners.
 
 ## Installation
 
-Version 0.1.0 has not been published to npm. Try from source with Node 22 or 24:
+Version 0.1.0 is available on npm. Requires Node 22 or later.
+You can also run from source with Node 22 or 24:
 
 ```sh
 git clone https://github.com/DeployAnyway/doggo-log.git
 cd doggo-log
-git checkout feature/initial-mvp
+git checkout main
 npm ci
 node examples/basic.js
 ```
 
-After an approved release: `npm install @deployanyway/doggo-log`.
+Install from npm: `npm install @deployanyway/doggo-log`.
 
 ## Quick start
 
@@ -48,7 +49,7 @@ node bin/cli.js success "Tests passed" --no-emoji
 node bin/cli.js info "Server started" --json --timestamp
 ```
 
-After publication: `npx @deployanyway/doggo-log info "Server started"`.
+Run with npx: `npx @deployanyway/doggo-log info "Server started"`.
 
 ## API
 
