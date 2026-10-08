@@ -1,6 +1,6 @@
 # doggo-log
 
-A tiny dog-themed logger with useful output and good manners.
+A tiny Node.js console logger with JSON output, log levels, and dog emojis. Good logs. Very good logs.
 
 ```text
 🐶 INFO    Server started
