@@ -1,0 +1,41 @@
+{
+  "name": "@deployanyway/doggo-log",
+  "version": "0.1.0",
+  "description": "A tiny dog-themed logger with useful output and good manners.",
+  "type": "module",
+  "exports": "./src/index.js",
+  "bin": {
+    "doggo-log": "./bin/cli.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeployAnyway/doggo-log.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DeployAnyway/doggo-log/issues"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "eslint": "^10.12.0",
+    "prettier": "^3.6.2"
+  }
+}
