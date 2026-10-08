@@ -1,6 +1,6 @@
 # doggo-log
 
-> **0.3.0 release candidate:** this branch is not published. npm still serves 0.2.0. New options below require a source checkout or locally packed candidate.
+> **Version 0.3.0:** install from npm with Node 22.13+ or Node 24. See MIGRATION.md for changes from 0.2.0.
 
 [![npm version](https://img.shields.io/npm/v/%40deployanyway%2Fdoggo-log)](https://www.npmjs.com/package/@deployanyway/doggo-log)
 [![CI](https://github.com/DeployAnyway/doggo-log/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DeployAnyway/doggo-log/actions/workflows/ci.yml)
@@ -181,10 +181,10 @@ node bin/cli.js info "Request accepted" --json --context '{"requestId":"abc"}'
 
 --stdin explicitly reads UTF-8 input up to 256 KiB; message arguments win. Warn/error go to stderr, other methods to stdout. Logging error still exits 0; malformed configuration exits 2. --no-color and NO_COLOR win over --color. PowerShell quoting differs from POSIX shells; use a simple JSON file or the API when shell quoting becomes the least funny part.
 
-## Try the candidate from source
+## Run from source
 
 ```sh
-git clone --branch feature/quality-standard https://github.com/DeployAnyway/doggo-log.git
+git clone --branch main https://github.com/DeployAnyway/doggo-log.git
 cd doggo-log
 npm ci
 npm run build
@@ -193,9 +193,9 @@ node bin/cli.js --help
 
 ## Candidate quality standard
 
-The 0.3 candidate provides useful declaration types, ESM/CommonJS exports, installed-archive checks, and coverage gates (90% statements/lines/functions, 85% branches). CI covers Linux Node 22/24 and Windows/macOS Node 24. Node 22.13+ is required. No runtime dependencies, telemetry or network requests.
+Version 0.3 provides useful declaration types, ESM/CommonJS exports, installed-archive checks, and coverage gates (90% statements/lines/functions, 85% branches). CI covers Linux Node 22/24 and Windows/macOS Node 24. Node 22.13+ is required. No runtime dependencies, telemetry or network requests.
 
-From a candidate checkout: npm ci, npm run build, npm run coverage, npm run test:types, npm run verify:package. Pack verification installs a temporary local archive and checks module entries, types, executable and offline npm exec.
+From a source checkout: npm ci, npm run build, npm run coverage, npm run test:types, npm run verify:package. Pack verification installs a temporary local archive and checks module entries, types, executable and offline npm exec.
 
 [Contribution guide](CONTRIBUTING.md) · [Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Roadmap](ROADMAP.md) · [Migration](MIGRATION.md).
 
