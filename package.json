@@ -1,7 +1,7 @@
 {
   "name": "@deployanyway/doggo-log",
   "version": "0.1.0",
-  "description": "A tiny dog-themed logger with useful output and good manners.",
+  "description": "A tiny Node.js console logger with JSON output, log levels, and dog emojis. Good logs. Very good logs.",
   "type": "module",
   "exports": "./src/index.js",
   "bin": {
@@ -37,5 +37,17 @@
   "devDependencies": {
     "eslint": "^10.12.0",
     "prettier": "^3.6.2"
-  }
+  },
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "cli",
+    "developer-tools",
+    "logger",
+    "logging",
+    "console",
+    "json",
+    "log-levels",
+    "dog"
+  ]
 }
