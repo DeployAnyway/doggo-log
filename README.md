@@ -1,5 +1,8 @@
 # doggo-log
 
+[![npm version](https://img.shields.io/npm/v/%40deployanyway%2Fdoggo-log)](https://www.npmjs.com/package/@deployanyway/doggo-log)
+[![CI](https://github.com/DeployAnyway/doggo-log/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DeployAnyway/doggo-log/actions/workflows/ci.yml)
+
 A tiny Node.js console logger with JSON output, log levels, and dog emojis. Good logs. Very good logs.
 
 ```text
