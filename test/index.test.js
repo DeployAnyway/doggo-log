@@ -17,7 +17,7 @@ const capture = (options = {}) => {
   return { logger, lines };
 };
 test("public API and each method emit expected labels and return output", () => {
-  assert.deepEqual(Object.keys(doglog), methods);
+  assert.deepEqual(Object.keys(doglog), [...methods, "child"]);
   const { logger, lines } = capture({ emoji: false, level: "debug" });
   for (const method of methods)
     assert.equal(
@@ -146,7 +146,7 @@ test("independent loggers and writer errors propagate", () => {
 });
 test("CLI options, stream routing and exit codes", () => {
   assert.ok(cli("--help").stdout.includes("Usage:"));
-  assert.equal(cli("--version").stdout.trim(), "0.1.1");
+  assert.equal(cli("--version").stdout.trim(), "0.2.0");
   const info = cli("info", "hello", "--no-emoji", "--prefix", "app");
   assert.equal(info.status, 0);
   assert.equal(info.stdout.trim(), "app INFO    hello");

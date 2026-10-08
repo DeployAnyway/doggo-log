@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 — 2026-10-08
+
+- Scoped logs, optional barks: Use `logger.child("database")` to create an independent logger with a nested prefix. Enable `{ bark: true }` or CLI `--bark` for dog commentary. JSON preserves the original message and adds a separate `commentary` field. Filtering still suppresses output.
+- Add npm and CI badges to the published README.
+
 ## 0.1.1 — 2026-10-08
 
 - Correct npm installation and npx documentation after the initial publication.

@@ -143,3 +143,19 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 - [doggo-log](https://github.com/DeployAnyway/doggo-log)
 - [ship-it-meter](https://github.com/DeployAnyway/ship-it-meter)
 - [bro-say](https://github.com/DeployAnyway/bro-say)
+
+## Scoped logs, optional barks
+
+Use `logger.child("database")` to create an independent logger with a nested prefix. Enable `{ bark: true }` or CLI `--bark` for dog commentary. JSON preserves the original message and adds a separate `commentary` field. Filtering still suppresses output.
+
+```sh
+npx @deployanyway/doggo-log success "Migration complete" --bark --prefix database
+```
+
+API (import the named functions from this package):
+
+```js
+createDogLogger({ bark: true, prefix: "api" })
+  .child("database")
+  .success("Migration complete");
+```
