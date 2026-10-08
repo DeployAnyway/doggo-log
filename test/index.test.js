@@ -6,8 +6,13 @@ import { createDogLogger, doglog } from "@deployanyway/doggo-log";
 
 const methods = ["debug", "log", "info", "success", "warn", "error"];
 const cliPath = fileURLToPath(new URL("../bin/cli.js", import.meta.url));
+const cliEnv = { ...process.env };
+delete cliEnv.NO_COLOR;
 const cli = (...args) =>
-  spawnSync(process.execPath, [cliPath, ...args], { encoding: "utf8" });
+  spawnSync(process.execPath, [cliPath, ...args], {
+    encoding: "utf8",
+    env: cliEnv,
+  });
 const capture = (options = {}) => {
   const lines = [];
   const logger = createDogLogger({
@@ -17,7 +22,7 @@ const capture = (options = {}) => {
   return { logger, lines };
 };
 test("public API and each method emit expected labels and return output", () => {
-  assert.deepEqual(Object.keys(doglog), [...methods, "child"]);
+  assert.deepEqual(Object.keys(doglog), [...methods, "child", "withContext"]);
   const { logger, lines } = capture({ emoji: false, level: "debug" });
   for (const method of methods)
     assert.equal(
@@ -146,7 +151,7 @@ test("independent loggers and writer errors propagate", () => {
 });
 test("CLI options, stream routing and exit codes", () => {
   assert.ok(cli("--help").stdout.includes("Usage:"));
-  assert.equal(cli("--version").stdout.trim(), "0.2.0");
+  assert.equal(cli("--version").stdout.trim(), "0.3.0");
   const info = cli("info", "hello", "--no-emoji", "--prefix", "app");
   assert.equal(info.status, 0);
   assert.equal(info.stdout.trim(), "app INFO    hello");
