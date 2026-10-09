@@ -151,7 +151,7 @@ test("independent loggers and writer errors propagate", () => {
 });
 test("CLI options, stream routing and exit codes", () => {
   assert.ok(cli("--help").stdout.includes("Usage:"));
-  assert.equal(cli("--version").stdout.trim(), "0.4.0");
+  assert.equal(cli("--version").stdout.trim(), "1.0.0");
   const info = cli("info", "hello", "--no-emoji", "--prefix", "app");
   assert.equal(info.status, 0);
   assert.equal(info.stdout.trim(), "app INFO    hello");

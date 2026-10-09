@@ -1,7 +1,7 @@
 {
   "name": "@deployanyway/doggo-log",
-  "version": "0.4.0",
-  "description": "A tiny Node.js console logger with JSON output, log levels, and dog emojis. Good logs. Very good logs.",
+  "version": "1.0.0",
+  "description": "Node.js logs with async request context, JSON, levels and configurable redaction. Good logs. Very good logs. Fewer lost request IDs.",
   "type": "module",
   "exports": {
     ".": {
@@ -12,6 +12,16 @@
       "require": {
         "types": "./index.d.cts",
         "default": "./dist/index.cjs"
+      }
+    },
+    "./context": {
+      "import": {
+        "types": "./context.d.ts",
+        "default": "./src/context.js"
+      },
+      "require": {
+        "types": "./context.d.cts",
+        "default": "./dist/context.cjs"
       }
     }
   },
@@ -27,7 +37,10 @@
     "dist",
     "index.d.ts",
     "index.d.cts",
-    "MIGRATION.md"
+    "MIGRATION.md",
+    "context.d.ts",
+    "context.d.cts",
+    "examples"
   ],
   "engines": {
     "node": ">=22.13"
@@ -76,7 +89,10 @@
     "dog",
     "typescript",
     "humor",
-    "deployanyway"
+    "deployanyway",
+    "async-local-storage",
+    "request-id",
+    "redaction"
   ],
   "main": "./dist/index.cjs",
   "types": "./index.d.ts",

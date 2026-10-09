@@ -1,9 +1,11 @@
-# 0.4.0 — 2026-10-08
+# 1.0.0 — Fetch the Context: async request scopes and redaction
 
-48 original commentary lines across six levels; opt-in seeded rotation; independent child sequences, no advancement on filtering or failed writes; barkLines catalog API and CLI controls. Classic commentary remains default.
+Node.js logs with async request context, JSON, levels and configurable redaction. Good logs. Very good logs. Fewer lost request IDs.
 
-Requires Node 22.13+ or 24. See README for copyable CLI and API examples. All required source, type, coverage and installed archive checks passed locally; CI must pass on the final PR head before merging. Original content, MIT code, no backend calls from the libraries.
+Intentional v1 changes: credential context keys redact by default, and text logs include nonempty context. Use redact:false only when you deliberately need the prior raw-context output. Existing levels, methods, JSON shape, formatting, child loggers, classic barks and opt-in rotation remain. New Node context subpath supports ESM and CommonJS; the core entry remains browser-adaptable.
 
-## Compatibility
+Install: `npm install @deployanyway/doggo-log@1.0.0`
 
-Existing APIs and defaults remain available; the new commentary rotation is explicit.
+See README for runnable API/CLI examples, supported formats, defaults and limitations. Existing catalogs remain. Core APIs require no online services. Root demo: https://deployanyway.github.io/.
+
+Validation is recorded in the v1 release report after final CI and installed-package verification.

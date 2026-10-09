@@ -1,6 +1,9 @@
 export type Level = "debug" | "log" | "info" | "success" | "warn" | "error";
 export type LogContext = Record<string, string | number | boolean | null>;
 export interface DogOptions {
+  /** Defaults to common credential context keys. Literal values also redact formatted messages. */
+  redact?: false | { keys?: string[]; values?: string[]; replacement?: string };
+  contextProvider?: () => LogContext;
   emoji?: boolean;
   bark?: boolean;
   barkMode?: "classic" | "rotate";

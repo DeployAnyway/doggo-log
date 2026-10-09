@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+- Fetch the Context: async request scopes and redaction.
+- Typed API, CLI integration, runnable codebase example and meaningful workflow tests.
+- Stable contracts and migration guidance; original humor stays around accurate facts.
+
 ## 0.4.0
 
 48 original lines: eight per log level. Default `barkMode: 'classic'` preserves the existing first-line commentary. Opt into `barkMode: 'rotate'` for variation without repeats until that level's eight lines have been emitted. A seed selects a repeatable starting point by prefix and level; omitted seed starts with the first line. Filtering and quiet mode do not consume rotation. Each child logger owns its own sequence.

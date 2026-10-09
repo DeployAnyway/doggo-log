@@ -9,3 +9,9 @@ Install 0.3.0 with npm. Seeds and exact humorous wording are version-specific. D
 48 original commentary lines across six levels; opt-in seeded rotation; independent child sequences, no advancement on filtering or failed writes; barkLines catalog API and CLI controls. Classic commentary remains default.
 
 Existing defaults and entry points remain available. The new commentary rotation is opt-in; classic first-line commentary remains the default.
+
+## 0.4.0 to stable 1.0.0
+
+Intentional v1 changes: credential context keys redact by default, and text logs include nonempty context. Use redact:false only when you deliberately need the prior raw-context output. Existing levels, methods, JSON shape, formatting, child loggers, classic barks and opt-in rotation remain. New Node context subpath supports ESM and CommonJS; the core entry remains browser-adaptable.
+
+See README for exact contracts, bounds and failure behavior.
