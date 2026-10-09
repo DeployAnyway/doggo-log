@@ -9,3 +9,5 @@ api
   .info("hello");
 // @ts-expect-error invalid literal
 api.createDogLogger({ level: "cow" });
+api.barkLines("warn");
+api.createDogLogger({ bark: true, barkMode: "rotate", seed: 42 });

@@ -1,6 +1,6 @@
 {
   "name": "@deployanyway/doggo-log",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "A tiny Node.js console logger with JSON output, log levels, and dog emojis. Good logs. Very good logs.",
   "type": "module",
   "exports": {
