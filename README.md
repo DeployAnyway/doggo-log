@@ -1,5 +1,43 @@
 # doggo-log
 
+## Fetch the Context: async request scopes and redaction (1.0.0)
+
+The Node-only @deployanyway/doggo-log/context entry exports createRequestLogger(options). Use one logger per service and run(context, callback, ...args) per request. AsyncLocalStorage carries the copied scalar context through awaited work; concurrent requests remain isolated. Child loggers share the active scope, and nested scopes restore the outer context when they finish.
+
+```js
+import { createRequestLogger } from "@deployanyway/doggo-log/context";
+const log = createRequestLogger({ json: true, context: { service: "api" } });
+const db = log.child("database");
+await log.run(
+  { requestId: "request-42", authorization: "private-header" },
+  async () => {
+    await Promise.resolve();
+    db.info("Query finished"); // requestId follows the work; authorization is redacted
+  },
+);
+log.dispose(); // only after all work has completed
+```
+
+run preserves callback return values/promises/errors. Scoped fields override static context, nested fields merge, and getContext() returns a fresh raw scope copy (do not expose it publicly). Outside scopes only static context remains. dispose disables tracking and prevents future run calls. Do not dispose an active service per request. Async boundaries that lose Node context, worker threads and external processes require explicit handoff; scopes do not cross them automatically. Reference: [Node asynchronous context documentation](https://nodejs.org/api/async_context.html).
+
+Redaction runs before writer callbacks and returned JSON/text. Default credential context keys are password, passwd, token, accessToken, refreshToken, authorization, cookie, secret and apiKey, case-insensitive with hyphens/underscores normalized. Configure redact: {keys: ['private'], values: ['literal-secret'], replacement: '[REDACTED]'}. keys replaces the default key list; values replaces exact literals in formatted messages, prefixes and string context values, longest first. redact: false explicitly disables it. Text logs now include supplied context, so request IDs are useful outside JSON too.
+
+Redaction is scoped: context fields must be scalar; it does not inspect arbitrary objects formatted in message arguments, discover unknown secrets, decode transformed tokens or scrub another writer's output. Avoid logging credentials in arbitrary message objects. Protect context keys and configure known literal values where needed. Filtering skips providers/writers; failed writes preserve bark rotation.
+
+```sh
+doggo-log info 'Request complete' --context '{"requestId":"42","authorization":"private"}' --json
+doggo-log info 'token=demo-only' --redact-values '["demo-only"]' --json
+node node_modules/@deployanyway/doggo-log/examples/fetch-context.mjs
+```
+
+--redact-keys accepts comma-separated context keys; --redact-values accepts a JSON string array. The runnable Node example makes two concurrent loopback HTTP requests and demonstrates isolated redacted logs. Browser demos can preview formatting/context redaction; AsyncLocalStorage itself runs in Node, not a browser shim.
+
+## Stable v1 contract
+
+Node 22.13+ or Node 24. MIT licensed. CLI flags, structured fields, ESM/CommonJS exports and declarations are covered by tests and installed-package checks. Existing 0.4 APIs remain available except the explicitly documented doggo-log redaction/text-context changes. Future incompatible public API changes require a major release; callers should consume structured fields rather than parse jokes. Exact humorous wording and seeded catalog choices are version-specific. No telemetry, external API keys or network service is needed for core use.
+
+Run npm test, npm run lint, npm run format:check, npm run coverage, npm run test:types and npm run verify:package from a source checkout. Runnable examples are shipped under examples/. The root demo is https://deployanyway.github.io/.
+
 ## Commentary that stays useful (0.4.0)
 
 48 original lines: eight per log level. Default `barkMode: 'classic'` preserves the existing first-line commentary. Opt into `barkMode: 'rotate'` for variation without repeats until that level's eight lines have been emitted. A seed selects a repeatable starting point by prefix and level; omitted seed starts with the first line. Filtering and quiet mode do not consume rotation. Each child logger owns its own sequence.

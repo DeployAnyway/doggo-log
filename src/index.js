@@ -1,6 +1,7 @@
 import { format } from "node:util";
 import { levels } from "./levels.js";
 import { barkLines, commentaryIndex } from "./commentary.js";
+import { copyContext, createRedactor } from "./redaction.js";
 export { barkLines };
 
 /**
@@ -22,6 +23,7 @@ export function createDogLogger(options = {}) {
     prefix: "",
     level: "info",
     context: {},
+    contextProvider: () => ({}),
     write: (line, level) =>
       level === "warn" || level === "error"
         ? console.error(line)
@@ -51,7 +53,16 @@ export function createDogLogger(options = {}) {
       throw new TypeError(
         "Context values must be strings, finite numbers, booleans or null.",
       );
-  config.context = { ...config.context };
+  config.context = copyContext(config.context);
+  if (typeof config.contextProvider !== "function")
+    throw new TypeError("contextProvider must be a function.");
+  const redactor = createRedactor(config.redact);
+  if (config.redact !== false)
+    config.redact = {
+      ...config.redact,
+      ...(config.redact?.keys ? { keys: [...config.redact.keys] } : {}),
+      ...(config.redact?.values ? { values: [...config.redact.values] } : {}),
+    };
   if (typeof config.level !== "string" || !Object.hasOwn(levels, config.level))
     throw new RangeError(
       `level must be one of: ${Object.keys(levels).join(", ")}.`,
@@ -73,7 +84,11 @@ export function createDogLogger(options = {}) {
       (...args) => {
         if (config.quiet || style.rank < levels[config.level].rank)
           return undefined;
-        const message = format(...args);
+        const message = redactor.text(format(...args));
+        const context = redactor.context({
+          ...config.context,
+          ...copyContext(config.contextProvider()),
+        });
         const pool = config.bark ? barkLines(level) : undefined;
         const index =
           config.barkMode === "rotate"
@@ -98,20 +113,19 @@ export function createDogLogger(options = {}) {
           line = JSON.stringify({
             level,
             message,
-            ...(Object.keys(config.context).length
-              ? { context: { ...config.context } }
-              : {}),
+            ...(Object.keys(context).length ? { context } : {}),
             ...(commentary ? { commentary } : {}),
-            ...(config.prefix ? { prefix: config.prefix } : {}),
+            ...(config.prefix ? { prefix: redactor.text(config.prefix) } : {}),
             ...(timestamp ? { timestamp } : {}),
           });
         } else {
           line = [
             timestamp,
-            config.prefix,
+            redactor.text(config.prefix),
             config.emoji ? style.emoji : undefined,
             level.toUpperCase().padEnd(7),
             message,
+            Object.keys(context).length ? JSON.stringify(context) : undefined,
             commentary,
           ]
             .filter((part) => part !== undefined && part !== "")

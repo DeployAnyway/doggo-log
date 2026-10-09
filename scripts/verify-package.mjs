@@ -108,6 +108,58 @@ try {
     ],
     temp,
   );
+  assert.ok(
+    pack.files.some((f) => f.path === "examples/fetch-context.mjs"),
+    "Runnable example must ship",
+  );
+  assert.equal(
+    run(
+      [
+        "--input-type=module",
+        "-e",
+        "import * as api from '@deployanyway/doggo-log';const log=api.createDogLogger({json:true,context:{authorization:'secret'},write:()=>{}});const r=JSON.parse(log.info('hello')); if(r.context.authorization!=='[REDACTED]')throw new Error('Redaction missing'); console.log(JSON.stringify(r));",
+      ],
+      temp,
+    ),
+    run(
+      [
+        "--input-type=commonjs",
+        "-e",
+        "const api=require('@deployanyway/doggo-log');const log=api.createDogLogger({json:true,context:{authorization:'secret'},write:()=>{}});const r=JSON.parse(log.info('hello')); if(r.context.authorization!=='[REDACTED]')throw new Error('Redaction missing'); console.log(JSON.stringify(r));",
+      ],
+      temp,
+    ),
+  );
+  for (const path of [
+    "src/context.js",
+    "dist/context.cjs",
+    "context.d.ts",
+    "context.d.cts",
+  ])
+    assert.ok(
+      pack.files.some((f) => f.path === path),
+      path,
+    );
+  const scoped =
+    "const log=api.createRequestLogger({json:true,write:()=>{}}); log.run({requestId:'scope'},async()=>{await Promise.resolve(); if(!log.info('ok').includes('scope'))throw new Error('Scope missing');}).then(()=>{log.dispose();console.log('scope verified');});";
+  assert.equal(
+    run(
+      [
+        "--input-type=module",
+        "-e",
+        "import * as api from '@deployanyway/doggo-log/context';" + scoped,
+      ],
+      temp,
+    ),
+    run(
+      [
+        "--input-type=commonjs",
+        "-e",
+        "const api=require('@deployanyway/doggo-log/context');" + scoped,
+      ],
+      temp,
+    ),
+  );
   console.log(
     JSON.stringify(
       {

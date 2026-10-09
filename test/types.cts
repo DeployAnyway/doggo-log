@@ -11,3 +11,7 @@ api
 api.createDogLogger({ level: "cow" });
 api.barkLines("warn");
 api.createDogLogger({ bark: true, barkMode: "rotate", seed: 42 });
+import request = require("@deployanyway/doggo-log/context");
+request
+  .createRequestLogger({ redact: false })
+  .run({ requestId: "abc" }, () => 1);
