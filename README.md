@@ -1,6 +1,31 @@
 # doggo-log
 
-> **Version 0.3.0:** install from npm with Node 22.13+ or Node 24. See MIGRATION.md for changes from 0.2.0.
+## Commentary that stays useful (0.4.0)
+
+48 original lines: eight per log level. Default `barkMode: 'classic'` preserves the existing first-line commentary. Opt into `barkMode: 'rotate'` for variation without repeats until that level's eight lines have been emitted. A seed selects a repeatable starting point by prefix and level; omitted seed starts with the first line. Filtering and quiet mode do not consume rotation. Each child logger owns its own sequence.
+
+```sh
+npx @deployanyway/doggo-log warn 'Retry budget almost exhausted' --bark --bark-mode rotate --seed demo --json
+```
+
+```js
+import { createDogLogger, barkLines } from "@deployanyway/doggo-log";
+const log = createDogLogger({
+  bark: true,
+  barkMode: "rotate",
+  seed: "job-42",
+  json: true,
+});
+const job = log.child("worker", { jobId: "42" });
+job.info("Job accepted");
+job.warn("Retry budget almost exhausted");
+job.success("Job complete");
+console.log(barkLines("warn"));
+```
+
+Caller messages and JSON context remain separate from commentary. `barkLines(level)` returns a fresh catalog copy. The logger is intentionally small: it does not provide persistence, transport, redaction or a production observability backend.
+
+> **Version 0.4.0:** install from npm with Node 22.13+ or Node 24. See MIGRATION.md for changes from 0.2.0.
 
 [![npm version](https://img.shields.io/npm/v/%40deployanyway%2Fdoggo-log)](https://www.npmjs.com/package/@deployanyway/doggo-log)
 [![CI](https://github.com/DeployAnyway/doggo-log/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DeployAnyway/doggo-log/actions/workflows/ci.yml)

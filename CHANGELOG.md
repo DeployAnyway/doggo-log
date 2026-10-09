@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+
+48 original lines: eight per log level. Default `barkMode: 'classic'` preserves the existing first-line commentary. Opt into `barkMode: 'rotate'` for variation without repeats until that level's eight lines have been emitted. A seed selects a repeatable starting point by prefix and level; omitted seed starts with the first line. Filtering and quiet mode do not consume rotation. Each child logger owns its own sequence.
+
+```sh
+
+
 ## 0.3.0 — 2026-10-08
 
 - Useful structured API/CLI additions described in README.
@@ -22,3 +29,4 @@
 - Six logging methods, level filtering, quiet mode, and custom prefixes.
 - Optional emojis, ANSI colors, timestamps, and JSON output.
 - CLI, tests, documentation, and Node 22/24 CI.
+```

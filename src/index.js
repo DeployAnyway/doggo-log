@@ -1,13 +1,7 @@
 import { format } from "node:util";
 import { levels } from "./levels.js";
-const barks = {
-  debug: "Sniffing for clues.",
-  log: "Filed under things I sniffed.",
-  info: "Good to know. Good dog to tell you.",
-  success: "Treat budget approved.",
-  warn: "Suspicious squirrel detected.",
-  error: "The dog has fetched the incident report.",
-};
+import { barkLines, commentaryIndex } from "./commentary.js";
+export { barkLines };
 
 /**
  * Create a small logger. Methods return the emitted line, or undefined if filtered.
@@ -19,6 +13,8 @@ export function createDogLogger(options = {}) {
   const config = {
     emoji: true,
     bark: false,
+    barkMode: "classic",
+    seed: undefined,
     color: false,
     timestamp: false,
     json: false,
@@ -62,6 +58,15 @@ export function createDogLogger(options = {}) {
     );
   if (typeof config.write !== "function" || typeof config.clock !== "function")
     throw new TypeError("write and clock must be functions.");
+  if (!["classic", "rotate"].includes(config.barkMode))
+    throw new RangeError("barkMode must be classic or rotate.");
+  if (
+    config.seed !== undefined &&
+    typeof config.seed !== "string" &&
+    !(typeof config.seed === "number" && Number.isFinite(config.seed))
+  )
+    throw new TypeError("seed must be a string or finite number.");
+  const counters = {};
   const logger = Object.fromEntries(
     Object.entries(levels).map(([level, style]) => [
       level,
@@ -69,7 +74,18 @@ export function createDogLogger(options = {}) {
         if (config.quiet || style.rank < levels[config.level].rank)
           return undefined;
         const message = format(...args);
-        const commentary = config.bark ? barks[level] : undefined;
+        const pool = config.bark ? barkLines(level) : undefined;
+        const index =
+          config.barkMode === "rotate"
+            ? (commentaryIndex(
+                config.seed,
+                config.prefix + ":" + level,
+                pool?.length ?? 1,
+              ) +
+                (counters[level] ?? 0)) %
+              (pool?.length ?? 1)
+            : 0;
+        const commentary = pool?.[index];
         let timestamp;
         if (config.timestamp) {
           const date = config.clock();
@@ -103,6 +119,8 @@ export function createDogLogger(options = {}) {
           if (config.color) line = `\u001b[${style.color}m${line}\u001b[0m`;
         }
         config.write(line, level);
+        if (config.bark)
+          counters[level] = ((counters[level] ?? 0) + 1) % pool.length;
         return line;
       },
     ]),

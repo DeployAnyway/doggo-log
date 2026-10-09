@@ -3,6 +3,8 @@ export type LogContext = Record<string, string | number | boolean | null>;
 export interface DogOptions {
   emoji?: boolean;
   bark?: boolean;
+  barkMode?: "classic" | "rotate";
+  seed?: string | number;
   color?: boolean;
   timestamp?: boolean;
   json?: boolean;
@@ -20,3 +22,5 @@ export type DogLogger = Record<Level, LogMethod> & {
 };
 export function createDogLogger(options?: DogOptions): DogLogger;
 export const doglog: DogLogger;
+
+export function barkLines(level: Level): string[];
